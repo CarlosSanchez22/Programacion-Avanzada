@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <style type="text/css">
+      /* Estilo para el canvas, estableciendo un color de fondo con algo de transparencia */
+      canvas {
+        background-color: rgba(0, 255, 106, 0.459);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Canvas donde se dibujaran las figuras -->
+    <canvas id="my_canvas" width="600" height="600"></canvas>
+
+    <script type="text/javascript">
+      // Obtener el elemento canvas y su contexto 2D para dibujar
+      const my_canvas = document.getElementById("my_canvas");
+      const ctx = my_canvas.getContext("2d");
+
+      var figura = 1; // Si se dibuja un circulo (1) o un rectangulo (2)
+      var pintarCamino = 1;
+      let currentColor = getRandomColor(); // Variable para almacenar el color de relleno actual
+
+      let h = 250;
+      let w = 250;
+      var direccion = "";
+      let speed = 1;
+      
+      document.addEventListener("keydown", (e) => {
+        switch (e.keyCode) {
+          case 38:
+            direccion = "Abajo";
+            break;
+          case 40:
+            direccion = "Arriba";
+            break;
+          case 37:
+            direccion = "Izquierda";
+            break;
+          case 39:
+            direccion = "Derecha";
+            break;
+        }
+
+        pintar();
+      });
+
+      function pintar() {
+        update();
+
+        ctx.fillStyle = "#91D9BF";
+        ctx.fillRect(0, 0, 600, 600);
+        ctx.stroke(); // Dibujar el contorno
+        ctx.fill(); // Rellenar la figura*/
+
+        ctx.fillStyle = getRandomColor();
+        ctx.fillRect(h, w, 100, 100);
+        ctx.stroke(); // Dibujar el contorno
+        ctx.fill(); // Rellenar la figura
+
+        requestAnimationFrame(pintar);
+      }
+
+      function update() {
+        switch (direccion) {
+          case "Abajo":
+            w -= speed;
+            break;
+          case "Arriba":
+            w += speed;
+            break;
+          case "Izquierda":
+            h -= speed;
+            break;
+          case "Derecha":
+            h += speed;
+            break;
+        }
+      }
+
+      function getRandomColor() {
+        var trans = "0.5"; // 50% de transparencia
+        var color = "rgba(";
+        for (var i = 0; i < 3; i++) {
+          color += Math.floor(Math.random() * 255) + ","; // Generar valores RGB aleatorios
+        }
+        color += trans + ")"; // Anadir la transparencia
+        return color;
+      }
+
+     
+      requestAnimationFrame(pintar);
+
+    </script>
+  </body>
+</html>
