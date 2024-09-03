@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <style type="text/css">
+      /* Estilo para el canvas, estableciendo un color de fondo con algo de transparencia */
+      canvas {
+        background-color: rgb(1, 87, 37);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Canvas donde se dibujaran las figuras -->
+    <canvas id="my_canvas" width="610" height="610"></canvas>
+
+    <script type="text/javascript">
+      // Obtener el elemento canvas y su contexto 2D para dibujar
+      const my_canvas = document.getElementById("my_canvas");
+      const ctx = my_canvas.getContext("2d");
+
+      class Rectangulo {
+        constructor(ancho, alto, x, y, speed) {
+          this.ancho = ancho;
+          this.alto = alto;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+        }
+
+        ColiciondelCuadro() {
+          if (
+            (x <= cuadro.x + 50 &&
+              x > cuadro.x &&
+              y <= cuadro.y + 50 &&
+              y >= cuadro.y) ||
+            (x <= cuadro.x + 50 &&
+              x >= cuadro.x &&
+              y + 40 <= cuadro.y + 50 &&
+              y + 40 >= cuadro.y) ||
+            (x + 40 >= cuadro.x &&
+              x + 40 <= cuadro.x + 50 &&
+              y >= cuadro.y &&
+              y <= cuadro.y + 50) ||
+            (x + 40 >= cuadro.x &&
+              x + 40 <= cuadro.x + 50 &&
+              y + 40 >= cuadro.y &&
+              y + 40 <= cuadro.y + 50)
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        genCuadro() {
+          cuadro.x = Math.floor(Math.random() * 250);
+          cuadro.y = Math.floor(Math.random() * 250);
+        }
+      }
+      let arriba = false;
+      let abajo = false;
+      let derecha = false;
+      let izquierda = false;
+      var x = 30,
+        y = 30;
+      var xC = 100,
+        yC = 100;
+
+      var color1 = Math.floor(Math.random() * 255);
+      var color2 = Math.floor(Math.random() * 255);
+      var color3 = Math.floor(Math.random() * 255);
+      var speed = 5;
+
+      var cuadro = new Rectangulo(50, 40, 40, 50, 5);
+
+      cuadro.genCuadro();
+
+      addEventListener("keydown", (event) => {
+        console.log("Y");
+        if (
+          event.keyCode == 87 ||
+          event.keyCode == 83 ||
+          event.keyCode == 68 ||
+          event.keyCode == 65
+        ) {
+          arriba = false;
+          abajo = false;
+          derecha = false;
+          izquierda = false;
+        }
+
+        //console.log(event.keyCode)
+        switch (event.keyCode) {
+          case 32:
+            speed += 4;
+
+            break;
+
+          case 87:
+            arriba = true;
+
+            break;
+          case 83:
+            abajo = true;
+
+            break;
+          case 68:
+            derecha = true;
+
+            break;
+
+          case 65:
+            izquierda = true;
+            break;
+        }
+      });
+
+      function animacion() {
+        if (arriba) {
+          if (y - speed < -50) {
+            y = 600;
+          } else {
+            y -= speed;
+          }
+        }
+        if (abajo) {
+          if (y + speed > 600) {
+            y = -50;
+          } else {
+            y += speed;
+          }
+        }
+        if (derecha) {
+          if (x + speed > 600) {
+            x = -50;
+          } else {
+            x += speed;
+          }
+        }
+        if (izquierda) {
+          if (x - speed < -50) {
+            x = 600;
+          } else {
+            x -= speed;
+          }
+        }
+        if (cuadro.ColiciondelCuadro()) {
+          cuadro.genCuadro();
+          console.log("Y");
+        }
+      }
+
+      function Paint() {
+        ctx.fillStyle = "black";
+        ctx.strokeRect(5, 5, 600, 600);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(5, 5, 600, 600);
+        ctx.font = "20px Georgia";
+        ctx.fillStyle = "green";
+        ctx.fillText("speed : " + speed, 400, 50);
+        ctx.fillRect(x, y, 40, 40);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(cuadro.x, cuadro.y, 50, 50);
+
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(cuadro.x, cuadro.y, 5, 5);
+
+        animacion();
+        requestAnimationFrame(Paint);
+      }
+
+      requestAnimationFrame(Paint);
+    </script>
+  </body>
+</html>
