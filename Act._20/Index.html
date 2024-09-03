@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>mariobros</title>
+    <style type="text/css">
+      canvas {
+        background-color: rgb(0, 13, 135);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="my_canvas" width="700" height="580"></canvas>
+
+    <script type="text/javascript">
+      const my_canvas = document.getElementById("my_canvas");
+      const ctx = my_canvas.getContext("2d");
+
+      // PISO
+      ctx.beginPath();
+      ctx.fillStyle = "#b65300";
+      ctx.fillRect(0, 430, 950, 180);
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(0, 430, 950, 180);
+
+      // CUBOS
+      for (let i = 0; i < 12; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = "#f99702";
+        ctx.fillRect(i * 70, 430, 40, 40);
+        ctx.strokeStyle = "#00000";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(i * 70, 430, 40, 40);
+      }
+
+      for (let i = 0; i < 12; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = "#f99702";
+        ctx.fillRect(i * 70 + 35, 480, 40, 40);
+        ctx.strokeStyle = "#00000";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(i * 70 + 35, 480, 40, 40);
+      }
+
+      for (let i = 0; i < 12; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = "#f99702";
+        ctx.fillRect(i * 70, 530, 40, 40);
+        ctx.strokeStyle = "#00000";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(i * 70, 530, 40, 40);
+      }
+
+      // CAMPOS
+      ctx.fillStyle = '#006f0E';
+      ctx.fillRect(0, 410, 900, 20);
+      ctx.fillStyle = '#37bd00';
+      ctx.fillRect(0, 390, 900, 20);
+      ctx.fillStyle = '#4aff00';
+      ctx.fillRect(0, 370, 900, 20);
+
+      // FLOR
+      ctx.fillStyle = '#37bd00';
+      ctx.fillRect(590, 300, 20, 70);
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(590, 300, 20, 70);
+
+      // FLOR IZQUIERDO
+      ctx.fillStyle = '#37bd00';
+      ctx.fillRect(550, 340, 40, 15);
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(550, 340, 40, 15);
+
+      // FLOR DERECHO
+      ctx.fillStyle = '#37bd00';
+      ctx.fillRect(610, 320, 40, 15);
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(610, 320, 40, 15);
+
+      // PALMA
+      ctx.fillStyle = 'brown';
+      ctx.fillRect(400, 120, 30, 250);
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(400, 120, 30, 250);
+
+      // PALMA DEL JUEGO
+      var img = new Image();
+      img.src = "palma.png";
+      img.onload = function() {
+        ctx.drawImage(img, 165, 0, 490, 120);
+      };
+
+
+      // AROS DE ORO
+      ctx.beginPath();
+      ctx.strokeStyle = "#fff302";
+      ctx.lineWidth = 3;
+      ctx.arc(280, 320, 20, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "#fff302";
+      ctx.lineWidth = 3;
+      ctx.arc(220, 320, 20, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "#fff302";
+      ctx.lineWidth = 3;
+      ctx.arc(160, 320, 20, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      // GIRASOL
+      function drawciruclo(x, y, radio, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, radio, 0, Math.PI * 2, false);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      drawciruclo(600, 270, 30, "BLACK");
+      drawciruclo(555, 280, 20, "#f1c000");
+      drawciruclo(565, 240, 20, "#f1c000");
+      drawciruclo(600, 225, 20, "#f1c000");
+      drawciruclo(635, 245, 20, "#f1c000");
+      drawciruclo(635, 290, 20, "#f1c000");
+      drawciruclo(595, 300, 20, "#f1c000");
+      drawciruclo(600, 260, 10, "#ffffff");
+    </script>
+  </body>
+</html>
