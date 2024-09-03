@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>mariobros</title>
+    <style type="text/css">
+      canvas {
+        background-color: rgba(125, 228, 197, 0.459);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="my_canvas" width="700" height="600"></canvas>
+
+    <script type="text/javascript">
+      const my_canvas = document.getElementById("my_canvas");
+      const ctx = my_canvas.getContext("2d");
+
+      // cubo 1 de moneda
+      ctx.beginPath();
+      ctx.fillStyle = "#ffcc08";
+      ctx.fillRect(80, 180, 60, 60);
+
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(80, 180, 60, 60);
+
+      // cubo 2 de moneda
+      ctx.beginPath();
+      ctx.fillStyle = "#ffcc08";
+      ctx.fillRect(180, 100, 60, 60);
+
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(180, 100, 60, 60);
+
+      // cubo 3 de moneda
+      ctx.beginPath();
+      ctx.fillStyle = "#ffcc08";
+      ctx.fillRect(240, 100, 60, 60);
+
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(240, 100, 60, 60);
+
+      // tubo
+      ctx.beginPath();
+      ctx.fillStyle = "green";
+      ctx.fillRect(400, 400, 60, 120);
+
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(400, 400, 60, 120);
+
+      ctx.beginPath();
+      ctx.fillStyle = "green";
+      ctx.fillRect(380, 400, 100, 30);
+
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(380, 400, 100, 30);
+
+      // cubo 1
+      ctx.beginPath();
+      ctx.fillStyle = "blue";
+      ctx.fillRect(150, 320, 100, 200);
+
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(150, 320, 100, 200);
+
+      // cubo 2
+      ctx.beginPath();
+      ctx.fillStyle = "orange";
+      ctx.fillRect(70, 420, 100, 100);
+
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(70, 420, 100, 100);
+
+      // cubo 6
+      ctx.beginPath();
+      ctx.fillStyle = "#3dee00";
+      ctx.fillRect(580, 330, 200, 200);
+
+      ctx.strokeStyle = "#00000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(580, 330, 200, 200);
+
+      // mario bros
+      var img = new Image();
+      img.src = "mariobros.png";
+      img.onload = function () {
+        ctx.drawImage(img, 240, 390, 100, 120);
+      };
+
+      // planta
+      var img1 = new Image();
+      img1.src = "planta.png";
+      img1.onload = function () {
+        ctx.drawImage(img1, 345, 280, 150, 120);
+      };
+
+      // Interrogacion del cubo
+      var img2 = new Image();
+      img2.src = "interrogacion.png";
+      img2.onload = function () {
+        ctx.drawImage(img2, 190, 110, 40, 40);
+      };
+
+      // piso
+      ctx.beginPath();
+      ctx.fillStyle = "#b65300";
+      ctx.fillRect(0, 510, 900, 110);
+
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(0, 510, 900, 110);
+
+      function drawciruclo(x, y, radio, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, radio, 0, Math.PI * 2, false);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      // cubo
+      drawciruclo(80, 500, 5, "#ffffff");
+      drawciruclo(80, 440, 5, "#ffffff");
+      drawciruclo(150, 440, 5, "#ffffff");
+      drawciruclo(150, 500, 5, "#ffffff");
+
+      // cubo 2
+      drawciruclo(160, 340, 5, "#ffffff");
+      drawciruclo(240, 340, 5, "#ffffff");
+      drawciruclo(240, 500, 5, "#ffffff");
+
+      // cubo 3
+      drawciruclo(590, 350, 5, "#ffffff");
+      drawciruclo(590, 500, 5, "#ffffff");
+      drawciruclo(690, 500, 5, "#ffffff");
+      drawciruclo(690, 350, 5, "#ffffff");
+
+      // cubo de moneda 1
+      drawciruclo(90, 190, 5, "#000000");
+      drawciruclo(90, 230, 5, "#000000");
+      drawciruclo(130, 230, 5, "#000000");
+      drawciruclo(130, 190, 5, "#000000");
+
+      // cubo de moneda 2
+      drawciruclo(290, 110, 5, "#000000");
+      drawciruclo(250, 110, 5, "#000000");
+      drawciruclo(250, 150, 5, "#000000");
+      drawciruclo(290, 150, 5, "#000000");
+    </script>
+  </body>
+</html>
