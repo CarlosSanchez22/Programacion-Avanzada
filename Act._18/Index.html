@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Avatar en Canvas</title>
+    <style type="text/css">
+      canvas {
+        background-color: rgba(125, 228, 197, 0.459);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="my_canvas" width="600" height="600"></canvas>
+
+    <script type="text/javascript">
+      const my_canvas = document.getElementById("my_canvas");
+      const ctx = my_canvas.getContext("2d");
+
+      // Dibujar la cabeza
+      ctx.beginPath();
+      ctx.arc(300, 200, 80, 0, Math.PI * 2, true);
+      ctx.fillStyle = "peachpuff";
+      ctx.fill();
+
+      // Dibujar un cabello más sencillo
+      ctx.beginPath();
+      ctx.arc(300, 160, 60, 0, Math.PI, true); // Semicírculo sobre la cabeza
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      // Dibujar la barba
+      ctx.beginPath();
+      ctx.arc(300, 240, 60, Math.PI, 0, true);
+      ctx.lineTo(240, 240);
+      ctx.closePath();
+      ctx.fillStyle = "brown"; // Color de la barba
+      ctx.fill();
+
+      // Dibujar la camisa negra
+      ctx.beginPath();
+      ctx.moveTo(240, 280);
+      ctx.lineTo(360, 280);
+      ctx.lineTo(400, 400);
+      ctx.lineTo(200, 400);
+      ctx.closePath();
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      // Dibujar los brazos
+      ctx.beginPath();
+      ctx.moveTo(240, 280);
+      ctx.lineTo(180, 400);
+      ctx.lineTo(220, 400);
+      ctx.lineTo(260, 300);
+      ctx.closePath();
+      ctx.fillStyle = "peachpuff";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(360, 280);
+      ctx.lineTo(340, 300);
+      ctx.lineTo(380, 400);
+      ctx.lineTo(420, 400);
+      ctx.closePath();
+      ctx.fillStyle = "peachpuff";
+      ctx.fill();
+
+      // Pierna izquierda
+      ctx.beginPath();
+      ctx.rect(250, 400, 40, 100);
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      // Pierna derecha
+      ctx.beginPath();
+      ctx.rect(310, 400, 40, 100);
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      // Dibujar los tenis blancos
+      ctx.beginPath();
+      ctx.rect(250, 500, 40, 20); // Tenis izquierdo
+      ctx.fillStyle = "white";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.rect(310, 500, 40, 20); // Tenis derecho
+      ctx.fillStyle = "white";
+      ctx.fill();
+
+      // Dibujar la cara (ojos y boca)
+      ctx.beginPath();
+      ctx.arc(275, 190, 10, 0, Math.PI * 2, true); // Ojo izquierdo
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(325, 190, 10, 0, Math.PI * 2, true); // Ojo derecho
+      ctx.fillStyle = "black";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(300, 230, 30, 0, Math.PI, false); // Boca (sonrisa)
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    </script>
+  </body>
+</html>
