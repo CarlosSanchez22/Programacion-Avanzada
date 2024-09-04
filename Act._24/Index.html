@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title> 
+	<style type="text/css">
+		canvas{
+			background-color: #D3DDF3;
+		}
+	/*		*/
+	</style>
+</head>
+<body>
+    
+    <canvas id="myCanvas" width="700" height="600" style="border:1px solid grey"></canvas>
+    <script type="text/javascript">
+
+
+   const myCanvas = document.getElementById("myCanvas");
+        const ctx = myCanvas.getContext("2d");
+       
+        var score =0;
+        var pause = false;
+        var direction = '';
+        var speed = 5;
+        var paredes = [];
+        
+        class Rectangulo {
+
+            constructor(color,w,h,x,y,speed){
+                this.color = color;
+                this.h = h;
+                this.w = w;
+                this.x = x;
+                this.y = y;
+                this.speed = speed;
+
+            }
+
+             colision(Movimientos){
+
+                if(this.x < Movimientos.x+Movimientos.w &&  
+                this.x + this.w > Movimientos.x &&  
+                this.y < Movimientos.y + Movimientos.h &&
+                this.y + this.h > Movimientos.y){ 
+                    return true;    
+                } 
+                return false;
+                }
+
+        }
+
+        var jugador = new Rectangulo("green",30,30,300,220,5)
+        var target = new Rectangulo("black",20,20,500,200)
+
+        
+        paredes.push( new Rectangulo("cyan",290,40,150,350));
+        paredes.push( new Rectangulo("cyan",290,40,150,170));
+       
+
+       
+   
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        document.addEventListener('keydown',function(e){
+
+                console.log(e.keyCode)
+
+                switch(e.keyCode){
+                    case 38:
+                        direction = 'up';
+                    break;
+
+                    case 40:
+                        direction = 'down';
+                    break;
+
+                    case 37:
+                        direction = 'left';
+                    break;
+                   
+                    case 39:
+                        direction = 'right';
+                    break;
+                    case 32:
+                        if(pause){
+                            pause=false
+                        } 
+                        else{
+                            pause=true
+                        }  
+                        
+                        
+                    break;
+                
+                }
+
+                 
+
+            })
+
+            function update(){
+                if(!pause){
+                    switch(direction)
+                {
+                    case 'up':
+                    jugador.y -= speed;
+                    if(jugador.y < 0){
+                        jugador.y = 600;;  
+                        }                   
+                    break;
+                    case 'down':
+                    jugador.y += speed;
+                        if(jugador.y > 600){
+                            jugador.y = 0;;  
+                        }                
+                    break;
+                    case 'left':
+                    jugador.x -= speed;
+                    if(jugador.x < 0){
+                        jugador.x = 700;  
+                        }   
+                    break;
+                    case 'right':
+                    jugador.x += speed;
+                    if(jugador.x > 700){
+                        jugador.x = 0;  
+                        } 
+           
+                    break;
+                }
+                if (jugador.colision(target)) {
+                    target.x = getRandomInt(0, myCanvas.width - target.w);
+                    target.y = getRandomInt(0, myCanvas.height - target.h);
+                    score ++;
+                    speed ++;
+                }
+
+                console.log(jugador.colision(paredes))
+
+
+                paredes.forEach(function(paredes,i,array){
+                    if (jugador.colision(paredes)) {
+
+                    switch(direction)
+                    {
+                        case 'up':
+                            jugador.y +=speed; 
+                        break;
+                        case 'down':
+                            jugador.y -=speed;
+                        break;
+                        case 'right':
+                            jugador.x -=speed;
+                        break;
+                        case 'left':
+                            jugador.x +=speed;
+                        break;
+                    }
+                    }
+                });
+                
+                if (jugador.colision(paredes)) {
+
+                switch(direction)
+                {
+                    case 'up':
+                        jugador.y +=speed; 
+                    break;
+                    case 'down':
+                        jugador.y -=speed;
+                    break;
+                    case 'right':
+                        jugador.x -=speed;
+                    break;
+                    case 'left':
+                        jugador.x +=speed;
+                    break;
+                }
+                }
+                }
+        
+            }
+
+
+            function paint(){
+
+                if(pause){
+                    ctx.fillStyle="grey";
+                    ctx.fillRect(0,0,700,600)
+                    ctx.fillStyle="black";
+                    ctx.font ="50px Arial";
+                    ctx.fillText("P A U S E", 180,300)
+
+                }else{
+                    ctx.fillStyle="white";
+                    ctx.fillRect(0,0,700,600)
+                }
+              
+
+                ctx.fillStyle="black";
+                ctx.font ="30px Arial";
+                ctx.fillText("Score:"+score, 250,50)
+
+                ctx.fillStyle=jugador.color;
+                ctx.fillRect(jugador.x,jugador.y,jugador.w,jugador.h)
+                ctx.strokeRect(jugador.x,jugador.y,jugador.w,jugador.h)
+
+                ctx.fillStyle=target.color;
+                ctx.fillRect(target.x,target.y,target.w,target.h)
+                ctx.strokeRect(target.x,target.y,target.w,target.h)
+
+                paredes.forEach(function(paredes,i,array){
+                    ctx.fillStyle=paredes.color;
+                    ctx.fillRect(paredes.x,paredes.y,paredes.w,paredes.h)
+                    ctx.strokeRect(paredes.x,paredes.y,paredes.w,paredes.h) 
+                });
+
+
+
+
+                update()
+                requestAnimationFrame(paint);
+            }
+
+            requestAnimationFrame(paint);
+    
+
+</script>
+</head>
+</body>
+
+</html>
