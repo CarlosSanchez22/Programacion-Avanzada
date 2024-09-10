@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: rgb(241, 219, 219);
+      }
+
+      canvas {
+        background-color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="mycanvas" width="600" height="500"></canvas>
+
+    <script type="">
+      const mycanvas = document.getElementById("mycanvas");
+      const ctx = mycanvas.getContext("2d");
+
+      var direction = "";
+      var speed = 5;
+      var score = 0;
+      var pausa = false;
+      var wall1234 = [];
+
+      const Risabb = new Audio("risabb.mp3");
+      const Intro = new Audio("KickCancion.mp3");
+      Intro.loop = true;
+      Intro.controls = true;
+
+      const playerImage = new Image();
+      playerImage.src = "kick butowski.gif";
+
+      const targetImage = new Image();
+      targetImage.src = "hermano.jpeg";
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      class Rectangulo {
+        constructor(color, w, h, x, y, speed) {
+          this.color = color;
+          this.h = h;
+          this.w = w;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+        }
+
+        colision(move) {
+          if (
+            this.x < move.x + move.w &&
+            this.x + this.w > move.x &&
+            this.y < move.y + move.h &&
+            this.y + this.h > move.y
+          ) {
+            return true;
+          }
+          return false;
+        }
+      }
+
+      // Cubo
+      var player = new Rectangulo("#db0000", 50, 50, 190, 120, 5);
+      var target = new Rectangulo("#000000", 50, 50, 300, 190);
+
+      // Bloques
+      wall1234.push(new Rectangulo("orange", 350, 50, 100, 410));
+      wall1234.push(new Rectangulo("orange", 350, 50, 130, 50));
+      wall1234.push(new Rectangulo("orange", 50, 180, 50, 170));
+      wall1234.push(new Rectangulo("orange", 50, 180, 500, 170));
+
+      // Movimiento
+      document.addEventListener("keypress", function (e) {
+        switch (e.keyCode) {
+          case 119:
+            direction = "up";
+            break;
+          case 115:
+            direction = "down";
+            break;
+          case 97:
+            direction = "left";
+            break;
+          case 100:
+            direction = "right";
+            break;
+          case 32:
+            pausa = !pausa;
+            break;
+        }
+      });
+
+      // Actualizar posición
+      function update() {
+        if (!pausa) {
+          switch (direction) {
+            case "up":
+              player.y -= speed;
+              if (player.y <= 0) player.y = 500;
+              break;
+            case "down":
+              player.y += speed;
+              if (player.y > 500) player.y = 0;
+              break;
+            case "right":
+              player.x += speed;
+              if (player.x > 500) player.x = 0;
+              break;
+            case "left":
+              player.x -= speed;
+              if (player.x <= 0) player.x = 600;
+              break;
+          }
+
+          if (player.colision(target)) {
+            score++;
+            speed++;
+            Risabb.play();
+            Intro.play();
+            target.x = Math.floor(Math.random() * 500);
+            target.y = Math.floor(Math.random() * 500);
+          }
+
+          wall1234.forEach(function (wall1234) {
+            if (player.colision(wall1234)) {
+              switch (direction) {
+                case "up":
+                  player.y += speed;
+                  break;
+                case "down":
+                  player.y -= speed;
+                  break;
+                case "right":
+                  player.x -= speed;
+                  break;
+                case "left":
+                  player.x += speed;
+                  break;
+              }
+            }
+          });
+        }
+      }
+
+      function pintar() {
+        if (pausa) {
+          ctx.fillStyle = "orange";
+          ctx.fillRect(0, 0, 600, 700);
+          ctx.fillStyle = "#000000";
+          ctx.font = "80px Arial";
+          ctx.fillText("P A U S E", 130, 200);
+        } else {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, 600, 500);
+        }
+
+        ctx.font = "35px Arial";
+        ctx.fillStyle = "#000000";
+        ctx.fillText("Score: " + score, 400, 30);
+
+        ctx.drawImage(playerImage, player.x, player.y, player.w, player.h);
+
+        ctx.drawImage(targetImage, target.x, target.y, target.w, target.h);
+
+        wall1234.forEach(function (wall1234) {
+          ctx.fillStyle = wall1234.color;
+          ctx.fillRect(wall1234.x, wall1234.y, wall1234.w, wall1234.h);
+          ctx.strokeRect(wall1234.x, wall1234.y, wall1234.w, wall1234.h);
+        });
+
+        update();
+        requestAnimationFrame(pintar);
+      }
+
+      requestAnimationFrame(pintar);
+
+      window.requestAnimationFrame = (function () {
+        return (
+          window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          function (callback) {
+            window.setTimeout(callback, 17);
+          }
+        );
+      })();
+    </script>
+  </body>
+</html>
