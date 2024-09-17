@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vue.js</title>
+    <style type="text/css">
+      input {
+        background-color: rgb(214, 205, 205);
+      }
+      .error {
+        color: rgb(107, 109, 3);
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <form @submit.prevent="enviarFormulario">
+        <fieldset>
+          <label>Correo electronico:</label>
+          <input v-model="correo" type="email" placeholder="Escribe aqui" />
+        </fieldset>
+        <fieldset>
+          <label>Contrasena:</label>
+          <input
+            v-model="contrasena"
+            type="password"
+            placeholder="Contrasena"
+          />
+        </fieldset>
+
+        <button type="submit">Acceder</button>
+
+        <p v-if="mensajeError" class="error">{{ mensajeError }}</p>
+      </form>
+
+      <hr />
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          let correo = ref("");
+          let contrasena = ref("");
+          let mensajeError = ref("");
+
+          const enviarFormulario = async () => {
+            if (!correo.value) {
+              mensajeError.value = "El correo electronico es obligatorio";
+              return;
+            } else if (!contrasena.value) {
+              mensajeError.value = "La contrasena es obligatoria";
+              return;
+            }
+
+            try {
+              // Obtener el archivo JSON local
+              const respuesta = await fetch("users.json");
+              if (!respuesta.ok) {
+                throw new Error(`HTTP error! status: ${respuesta.status}`);
+              }
+              const usuarios = await respuesta.json();
+
+              // Verificar si el correo electronico y la contrasena coinciden
+              const usuario = usuarios.find(
+                (user) =>
+                  user.email === correo.value &&
+                  user.password === contrasena.value
+              );
+
+              if (usuario) {
+                mensajeError.value = "Inicio de sesion exitoso";
+              } else {
+                mensajeError.value =
+                  "Correo electronico o contrasena invalidos.";
+              }
+            } catch (error) {
+              console.error("Error al obtener los datos de usuario:", error);
+              mensajeError.value =
+                "Error al obtener los datos de usuario. " + error.message;
+            }
+          };
+
+          return {
+            correo,
+            contrasena,
+            mensajeError,
+            enviarFormulario,
+          };
+        },
+      }).mount("#main");
+    </script>
+  </body>
+</html>
