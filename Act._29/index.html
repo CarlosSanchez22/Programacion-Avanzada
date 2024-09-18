@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vue.js</title>
+    <style type="text/css">
+      input {
+        background-color: rgb(214, 205, 205);
+      }
+      .error {
+        color: rgb(107, 109, 3);
+        margin-top: 10px;
+      }
+      .tabla-container {
+        width: 60%; /* Mismo ancho que la tabla */
+        margin: 20px auto; /* Centrar el contenedor */
+        text-align: center; /* Centrar el contenido */
+      }
+      table {
+        width: 100%; /* La tabla toma todo el ancho del contenedor */
+        border-collapse: collapse;
+        background-color: #f9f9f9;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background-color: #4caf50;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <form @submit.prevent="enviarFormulario">
+        <fieldset>
+          <label>Correo electronico:</label>
+          <input v-model="correo" type="email" placeholder="Escribe aqui" />
+        </fieldset>
+        <fieldset>
+          <label>Contrasena:</label>
+          <input
+            v-model="contrasena"
+            type="password"
+            placeholder="Contrasena"
+          />
+        </fieldset>
+
+        <button type="submit">Acceder</button>
+
+        <p v-if="mensajeError" class="error">{{ mensajeError }}</p>
+      </form>
+
+      <hr />
+
+      <!-- Mostrar la tabla de usuarios si el login es exitoso -->
+      <div v-if="usuarios.length > 0" class="tabla-container">
+        <h2>Usuarios Registrados:</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="usuario in usuarios" :key="usuario.id">
+              <td>{{ usuario.id }}</td>
+              <td>{{ usuario.name }}</td>
+              <td>{{ usuario.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          let correo = ref("");
+          let contrasena = ref("");
+          let mensajeError = ref("");
+          let usuarios = ref([]);
+
+          const enviarFormulario = async () => {
+            if (!correo.value || !contrasena.value) {
+              mensajeError.value = correo.value
+                ? "La contraseña es obligatoria"
+                : "El correo electrónico es obligatorio";
+              return;
+            }
+
+            try {
+              // Obtener el archivo JSON local
+              const respuesta = await fetch("users.json");
+              if (!respuesta.ok) {
+                throw new Error(`HTTP error! status: ${respuesta.status}`);
+              }
+              const dataUsuarios = await respuesta.json();
+
+              // Verificar si el correo electrónico y la contraseña coinciden
+              const usuario = dataUsuarios.find(
+                (user) =>
+                  user.email === correo.value &&
+                  user.password === contrasena.value
+              );
+
+              if (usuario) {
+                mensajeError.value = "Inicio de sesion exitoso";
+                // Almacenar todos los usuarios en la variable 'usuarios'
+                usuarios.value = dataUsuarios;
+              } else {
+                mensajeError.value =
+                  "Correo electronico o contrasena invalidos.";
+                usuarios.value = []; // Vaciar los usuarios si la autenticación falla
+              }
+            } catch (error) {
+              console.error("Error al obtener los datos de usuario:", error);
+              mensajeError.value =
+                "Error al obtener los datos de usuario. " + error.message;
+            }
+          };
+
+          return {
+            correo,
+            contrasena,
+            mensajeError,
+            usuarios,
+            enviarFormulario,
+          };
+        },
+      }).mount("#main");
+    </script>
+  </body>
+</html>
