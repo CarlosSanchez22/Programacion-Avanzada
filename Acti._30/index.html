@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Vue js
+    </title>
+    <style type="text/css">
+        input {
+            background-color: rgb(255, 255, 255);
+        }
+        .table-container {
+            max-width: 800px; 
+            margin: 20px auto; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        table {
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        table, th, td {
+            border: 1px solid black; 
+        }
+        th, td {
+            padding: 10px; 
+            text-align: left; 
+        }
+        .button {
+            margin-right: 5px; 
+        }
+        .action-container {
+            max-width: 800px;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between; /* Alinea los elementos a los extremos */
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="main">
+
+        <h2>
+            Acceso
+        </h2>
+        
+        <form @submit.prevent="onSubmit" v-if="!access">
+            <fieldset>
+                <label>
+                    Username: 
+                </label>
+                <input v-model="username" type="text" placeholder="Escribe aqui" required>
+            </fieldset>
+
+            <fieldset>
+                <label>
+                    Password: 
+                </label>
+                <input v-model="password" placeholder="Escribe aqui" type="password" required>
+            </fieldset>
+
+            <button type="submit">
+                Acceder
+            </button>
+        
+        </form>
+
+        <div v-if="access">
+            <h1>
+                Bienvenido al sistema
+            </h1>
+
+            <!-- Contenedor de acciones (Botón de agregar + tabla) -->
+            <div class="action-container">
+                <button @click="showAddUserForm = true">Agregar</button> <!-- Botón de agregar -->
+            </div>
+
+            <!-- Formulario para agregar usuario -->
+            <div v-if="showAddUserForm">
+                <h2>Agregar Usuario</h2>
+                <fieldset>
+                    <label>Nombre:</label>
+                    <input v-model="newUser.name" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>Username:</label>
+                    <input v-model="newUser.username" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>Email:</label>
+                    <input v-model="newUser.email" type="email" required>
+                </fieldset>
+                <fieldset>
+                    <label>Telefono:</label>
+                    <input v-model="newUser.phone" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>Sitio Web:</label>
+                    <input v-model="newUser.website" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>Password:</label>
+                    <input v-model="newUser.password" type="password" required>
+                </fieldset>
+                <button @click="addUser">Agregar Usuario</button>
+                <button @click="showAddUserForm = false">Cancelar</button>
+            </div>
+
+            <!-- Contenedor para la tabla -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                            <th>Sitio Web</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.website }}</td>
+                            <td>
+                                <button class="button" @click="editUser(user)">Editar</button> 
+                                <button class="button" @click="deleteUser(user.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulario para editar usuario -->
+            <div v-if="isEditing">
+                <h2>Editar Usuario</h2>
+                <fieldset>
+                    <label>
+                        Nombre: 
+                    </label>
+                    <input v-model="editedUser.name" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Username: 
+                    </label>
+                    <input v-model="editedUser.username" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Email: 
+                    </label>
+                    <input v-model="editedUser.email" type="email" required>
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Telefono: 
+                    </label>
+                    <input v-model="editedUser.phone" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Sitio Web: 
+                    </label>
+                    <input v-model="editedUser.website" type="text" required>
+                </fieldset>
+                <fieldset>
+                    <label>
+                        Password: 
+                    </label>
+                    <input v-model="editedUser.password" type="password" required>
+                </fieldset>
+                <button @click="updateUser">Actualizar</button>
+                <button @click="cancelEdit">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          let username = ref('');
+          let password = ref('');
+          let access = ref(false);
+          let users = ref([]); 
+          let isEditing = ref(false); 
+          let editedUser = ref({}); 
+          let showAddUserForm = ref(false); 
+          let newUser = ref({ name: '', username: '', email: '', phone: '', website: '', password: '' }); 
+
+          const onSubmit = () => {
+            fetch('users.json') 
+            .then(res => res.json())
+            .then((response) => { 
+              const userFound = response.find(e => e.username === username.value && e.password === password.value);
+              if (userFound) {
+                console.log("Login exitoso");
+                access.value = true;
+                users.value = response; 
+              } else {
+                alert("Verifique su informacion");
+              }
+            })
+            .catch((error) => {
+              alert("Ha ocurrido un error");
+            });
+          };
+
+          const addUser = () => {
+            const lastId = users.value.length ? Math.max(...users.value.map(u => u.id)) : 0;
+            newUser.value.id = lastId + 1;
+            users.value.push({ ...newUser.value }); 
+            newUser.value = { name: '', username: '', email: '', phone: '', website: '', password: '' }; 
+            showAddUserForm.value = false;
+          };
+
+          const editUser = (user) => {
+            editedUser.value = { ...user }; 
+            isEditing.value = true; 
+          };
+
+          const updateUser = () => {
+            const index = users.value.findIndex(user => user.id === editedUser.value.id);
+            if (index !== -1) {
+              users.value[index] = { ...editedUser.value }; 
+              alert("Usuario actualizado exitosamente");
+            }
+            isEditing.value = false; 
+          };
+
+          const cancelEdit = () => {
+            isEditing.value = false; 
+          };
+
+          const deleteUser = (id) => {
+            users.value = users.value.filter(user => user.id !== id); 
+            alert(`Usuario con ID ${id} eliminado`);
+          };
+
+          return { 
+            username,
+            password,
+            access,
+            users,
+            isEditing,
+            editedUser,
+            showAddUserForm,
+            newUser,
+            onSubmit,
+            addUser,
+            editUser, 
+            updateUser, 
+            cancelEdit, 
+            deleteUser 
+          };
+        }
+      }).mount('#main');
+    </script>
+</body>
+</html>

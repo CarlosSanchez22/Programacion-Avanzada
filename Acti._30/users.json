@@ -1,0 +1,48 @@
+[
+    {
+        "id": 1,
+        "name": "John Carlos",
+        "username": "Carlos22",
+        "email": "johncarlos_21@uabcs.mx",
+        "phone": "6122251004",
+        "website": "hildegard.org",
+        "password": "12"
+      },
+    {
+      "id": 2,
+      "name": "Maria Gomez",
+      "username": "Maria123",
+      "email": "maria.gomez@gmail.com",
+      "phone": "15551234567",
+      "website": "mariagomez.com",
+      "password": "abc123"
+    },
+    {
+      "id": 3,
+      "name": "Pedro Sanchez",
+      "username": "PedroS",
+      "email": "pedro.sanchez@yahoo.com",
+      "phone": "14449876543",
+      "website": "pedrosanchez.org",
+      "password": "password123"
+    },
+    {
+      "id": 4,
+      "name": "Ana Lopez",
+      "username": "AnaLopez",
+      "email": "ana.lopez@hotmail.com",
+      "phone": "13336543210",
+      "website": "analopez.net",
+      "password": "qwerty"
+    },
+    {
+      "id": 5,
+      "name": "Luis Hernandez",
+      "username": "LuisH",
+      "email": "luis.hernandez@gmail.com",
+      "phone": "12221110000",
+      "website": "luishernandez.info",
+      "password": "123456"
+    }
+  ]
+  
